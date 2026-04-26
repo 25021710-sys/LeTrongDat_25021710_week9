@@ -1,4 +1,4 @@
-name: Bai05 Code Coverage Strategy
+name: Bai06 Pipeline Optimization and Caching
 
 on:
   push:
@@ -24,22 +24,24 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          # Đây là trái tim của Bài 06: Giúp lưu trữ các dependency để dùng lại
           cache: maven
 
-      # Sử dụng verify thay vì test để JaCoCo kiểm tra ngưỡng 80% coverage
-      - name: Build and Verify Bai05 with JaCoCo
-        run: mvn -B clean verify -pl Bai05 -am
+      - name: Build and Verify Bai06
+        # Lưu ý: Nếu bạn đã đổi tên folder/artifactId thành Bai06 thì sửa -pl Bai06
+        # Còn nếu vẫn dùng code Bai05 để test cache thì để Bai05 nhé.
+        # Ở đây mình để Bai06 theo yêu cầu của bạn.
+        run: mvn -B clean verify -pl Bai06 -am
 
-      # Lưu trữ file JAR sản phẩm
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Bai05-Build-Artifact-${{ matrix.os }}
-          path: Bai05/target/*.jar
+          name: Bai06-Build-Artifact-${{ matrix.os }}
+          path: Bai06/target/*.jar
 
-      # Lưu trữ báo cáo JaCoCo để xem độ bao phủ code (Bài 5)
       - name: Upload JaCoCo Coverage Report
         uses: actions/upload-artifact@v4
         with:
-          name: Bai05-JaCoCo-Report-${{ matrix.os }}
-          path: Bai05/target/site/jacoco/
+          name: Bai06-JaCoCo-Report-${{ matrix.os }}
+          # Sửa path cho khớp với folder Bai06
+          path: Bai06/target/site/jacoco/ 
