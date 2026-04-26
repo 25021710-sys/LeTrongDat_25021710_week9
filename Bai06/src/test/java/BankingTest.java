@@ -93,6 +93,7 @@ public class BankingTest {
         // Giao dịch sẽ bị catch Exception InsufficientFundsException
         assertEquals(5500.0, poorSavings.getBalance(), "Số dư giữ nguyên vì vi phạm số dư tối thiểu");
     }
+    // Kiem tra hieu qua Caching - Lan 2    
 
     // ==========================================
     // TEST CHO KHÁCH HÀNG (CUSTOMER)
