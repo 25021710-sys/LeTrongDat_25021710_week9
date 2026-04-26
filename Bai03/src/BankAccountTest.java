@@ -2,6 +2,9 @@ import org.junit.jupiter.api.*;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @DisplayName("Bank & Account Unit Tests")
 class BankAccountTest {
@@ -79,6 +82,30 @@ class BankAccountTest {
             ByteArrayInputStream input = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
             bank.readCustomerList(input);
             assertTrue(bank.getCustomerList().isEmpty());
+        }
+        // =========================================================
+        // File Path Tests (Dành cho Bài 4)
+        // =========================================================
+        @Nested
+        @DisplayName("File Path Compatibility (Matrix Strategy)")
+        class FilePathTests {
+
+            @Test
+            @DisplayName("Cố tình dùng đường dẫn cứng để gây lỗi trên Linux/macOS")
+            void testHardcodedFilePath() {
+                String directory = "logs";
+                String fileName = "transaction.txt";
+
+                // CỐ TÌNH GÂY LỖI: Dùng dấu gạch chéo ngược chuẩn Windows
+                String hardcodedPath = directory + "\\" + fileName;
+
+                System.out.println("Đường dẫn hiện tại: " + hardcodedPath);
+
+                // Kiểm tra xem đường dẫn có chứa dấu "\\" không.
+                // Bài test này có thể Pass trên Windows nhưng Failed trên Ubuntu/macOS
+                // khi áp dụng vào các hàm xử lý file thực tế.
+                assertTrue(hardcodedPath.contains("\\"));
+            }
         }
     }
 }
