@@ -1,59 +1,41 @@
-name: Bai07 Automated Code Review via PR
+name: Java CI for Bai10
 
 on:
   push:
-    branches: [ "main", "master","dev" ]
+    branches: [ "main", "master", "dev" ]
   pull_request:
-    branches: [ "main", "master","dev" ]
+    branches: [ "main", "master", "dev" ]
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
 
-      - name: Build, Test for Bai07
-        run: mvn -B clean verify -pl Bai07 -am
+    - name: Build and Test Bai10
+      # Lệnh này sẽ chạy Maven cho module Bai10
+      run: mvn -pl Bai10 -am package
 
-      # --- ÉP MAVEN CHẠY CHECKSTYLE VÀ ĐÁNH RỚT WORKFLOW NẾU CÓ LỖI ---
-      - name: Run Maven Checkstyle
-        run: mvn -B checkstyle:check -pl Bai07
+    # --- CÁC BƯỚC DƯỚI ĐÂY SẼ CHẠY KỂ CẢ KHI BƯỚC TRÊN BỊ LỖI (ĐỂ BẠN LẤY REPORT) ---
+    - name: Upload JAR Artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Bai10-Build-Artifact
+        path: Bai10/target/*.jar
 
-      # --- BOT SẼ ĐỌC BÁO CÁO LỖI VÀ BÌNH LUẬN ---
-      - name: Checkstyle Inline Feedback Bot
-        if: always() && github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
-        uses: dbelyaev/action-checkstyle@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          level: warning
-          # Dòng quan trọng: Chỉ cho Bot biết file báo cáo lỗi đang nằm ở đâu
-          checkstyle_file: Bai07/target/checkstyle-result.xml
-
-      - name: Upload JAR Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Bai07-Build-Artifact-${{ matrix.os }}
-          path: Bai07/target/*.jar
-
-      - name: Upload JaCoCo Coverage Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Bai07-JaCoCo-Report-${{ matrix.os }}
-          path: Bai07/target/site/jacoco/
+    - name: Upload JaCoCo Coverage Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Bai10-JaCoCo-Report
+        path: Bai10/target/site/jacoco/
