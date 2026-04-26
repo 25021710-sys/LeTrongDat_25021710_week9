@@ -114,11 +114,12 @@ public class BankingTest {
     }
     @Test
     public void testFilePathCompatibility() {
-        // Cố tình fix cứng định dạng đường dẫn của Windows
-        String expectedPath = "folder\\file.txt";
+        // SỬA TẠI ĐÂY: Sử dụng File.separator để tự động thích ứng với hệ điều hành
+        String expectedPath = "folder" + File.separator + "file.txt";
+
         File myFile = new File("folder", "file.txt");
 
-        // Test này sẽ Pass trên Windows, nhưng Fail chắc chắn trên Ubuntu/MacOS
-        assertEquals(expectedPath, myFile.getPath());
+        // Giờ đây test này sẽ PASS trên cả Windows, Ubuntu và MacOS
+        assertEquals(expectedPath, myFile.getPath(), "Đường dẫn phải khớp với định dạng của hệ điều hành hiện tại");
     }
 }
