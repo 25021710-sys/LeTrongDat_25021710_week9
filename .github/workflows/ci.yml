@@ -3,6 +3,7 @@ name: Bai07 Automated Code Review via PR
 on:
   push:
     branches: [ "main", "master" ]
+  # Sự kiện này rất quan trọng cho Bài 7: Kích hoạt khi có người tạo Pull Request
   pull_request:
     branches: [ "main", "master" ]
 
@@ -26,25 +27,24 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build, Test for Bai07
+      - name: Build, Test and Checkstyle for Bai07
+        # Chạy verify sẽ kích hoạt cả test (JaCoCo) và Checkstyle (do đã cấu hình trong pom.xml)
         run: mvn -B clean verify -pl Bai07 -am
 
-      # --- ÉP MAVEN CHẠY CHECKSTYLE VÀ ĐÁNH RỚT WORKFLOW NẾU CÓ LỖI ---
-      - name: Run Maven Checkstyle
-        run: mvn -B checkstyle:check -pl Bai07
-
-      # --- BOT SẼ ĐỌC BÁO CÁO LỖI VÀ BÌNH LUẬN ---
+      # --- PHẦN THÊM MỚI CHO BÀI 7: BOT BÌNH LUẬN ---
       - name: Checkstyle Inline Feedback Bot
+        # Dùng if: always() để đảm bảo Bot vẫn chạy và comment dù bước Build ở trên bị FAILED do lỗi code
+        # Chỉ chạy trên sự kiện PR và ở môi trường Ubuntu (để tránh bot spam 3 bình luận giống nhau do matrix)
         if: always() && github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
         uses: dbelyaev/action-checkstyle@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           level: warning
-          # Dòng quan trọng: Chỉ cho Bot biết file báo cáo lỗi đang nằm ở đâu
-          checkstyle_file: Bai07/target/checkstyle-result.xml
+      # ---------------------------------------------
 
       - name: Upload JAR Artifact
+        # Dùng if: always() để file JAR và Report vẫn được lưu trữ ngay cả khi code bị lỗi format
         if: always()
         uses: actions/upload-artifact@v4
         with:
