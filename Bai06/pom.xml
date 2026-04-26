@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>Bai05</artifactId> <packaging>jar</packaging>
+    <artifactId>Bai06</artifactId> <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

@@ -44,4 +44,4 @@ jobs:
         with:
           name: Bai06-JaCoCo-Report-${{ matrix.os }}
           # Sửa path cho khớp với folder Bai06
-          path: Bai06/target/site/jacoco/ 
+          path: Bai06/target/site/jacoco/
