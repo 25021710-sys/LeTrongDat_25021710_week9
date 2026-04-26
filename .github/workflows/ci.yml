@@ -15,8 +15,6 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    # MÌNH ĐÃ XÓA PHẦN 'defaults' Ở ĐÂY ĐỂ TRÁNH BỊ KHÓA THƯ MỤC LÀM VIỆC
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,16 +26,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # BƯỚC THÊM MỚI: Install project gốc trước (bỏ qua test để chạy nhanh)
-      - name: Install Root Project
-        run: mvn -B clean install -DskipTests
+      # Đứng ở thư mục gốc, nhưng chỉ build và test riêng module Bai04 (-pl Bai04)
+      # và các module mà Bai04 phụ thuộc (-am)
+      - name: Build and Test Bai04 Only
+        run: mvn -B clean test package -pl Bai04 -am
 
-      # Mới chui vào Bai04 để chạy Test (Bài 4)
-      - name: Build with Maven (Test and Package)
-        run: mvn -B clean test package
-        working-directory: ./Bai04
-
-      # Lưu lại Artifact
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
