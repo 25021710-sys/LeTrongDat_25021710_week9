@@ -2,6 +2,7 @@ import bank.*;
 import org.junit.jupiter.api.*;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.io.File;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("bank.Bank & bank.Account Unit Tests")
@@ -81,28 +82,27 @@ class BankAccountTest {
             bank.readCustomerList(input);
             assertTrue(bank.getCustomerList().isEmpty());
         }
+
         // =========================================================
-        // File Path Tests (Dành cho Bài 4)
+        // File Path Tests (Đã fix cho Bài 4)
         // =========================================================
         @Nested
         @DisplayName("File Path Compatibility (Matrix Strategy)")
         class FilePathTests {
 
             @Test
-            @DisplayName("Cố tình dùng đường dẫn cứng để gây lỗi trên Linux/macOS")
-            void testHardcodedFilePath() {
+            @DisplayName("Sử dụng File.separator để tương thích Linux/macOS/Windows")
+            void testCrossPlatformFilePath() {
                 String directory = "logs";
                 String fileName = "transaction.txt";
 
-                // CỐ TÌNH GÂY LỖI: Dùng dấu gạch chéo ngược chuẩn Windows
-                String hardcodedPath = directory + "\\" + fileName;
+                // ĐÃ SỬA LỖI: Dùng File.separator thay vì dấu "\\"
+                String crossPlatformPath = directory + File.separator + fileName;
 
-                System.out.println("Đường dẫn hiện tại: " + hardcodedPath);
+                System.out.println("Đường dẫn an toàn đa nền tảng: " + crossPlatformPath);
 
-                // Kiểm tra xem đường dẫn có chứa dấu "\\" không.
-                // Bài test này có thể Pass trên Windows nhưng Failed trên Ubuntu/macOS
-                // khi áp dụng vào các hàm xử lý file thực tế.
-                assertTrue(hardcodedPath.contains("\\"));
+                // Kiểm tra xem đường dẫn có chứa đúng dấu phân cách của hệ điều hành đang chạy không
+                assertTrue(crossPlatformPath.contains(File.separator));
             }
         }
     }
