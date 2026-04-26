@@ -1,9 +1,10 @@
+package bank;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- * Lớp Customer đại diện cho một khách hàng.
+ * Lớp bank.Customer đại diện cho một khách hàng.
  */
 public class Customer {
     private long idNumber;

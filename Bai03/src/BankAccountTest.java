@@ -1,12 +1,10 @@
+import bank.*;
 import org.junit.jupiter.api.*;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-@DisplayName("Bank & Account Unit Tests")
+@DisplayName("bank.Bank & bank.Account Unit Tests")
 class BankAccountTest {
 
     private CheckingAccount account;
@@ -19,10 +17,10 @@ class BankAccountTest {
     }
 
     // =========================================================
-    // Account Tests
+    // bank.Account Tests
     // =========================================================
     @Nested
-    @DisplayName("Account")
+    @DisplayName("bank.Account")
     class AccountTests {
 
         @Test
@@ -47,10 +45,10 @@ class BankAccountTest {
     }
 
     // =========================================================
-    // Bank Tests
+    // bank.Bank Tests
     // =========================================================
     @Nested
-    @DisplayName("Bank")
+    @DisplayName("bank.Bank")
     class BankTests {
 
         @Test

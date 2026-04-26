@@ -1,3 +1,5 @@
+package bank;
+
 /**
  * Ngoại lệ chung trong hệ thống ngân hàng.
  */

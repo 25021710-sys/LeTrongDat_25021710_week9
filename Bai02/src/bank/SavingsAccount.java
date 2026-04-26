@@ -1,3 +1,5 @@
+package bank;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,7 @@ public class SavingsAccount extends Account { // Đã sửa: Dấu ngoặc nhọ
         try {
             doDepositing(amount);
             double finalBalance = getBalance();
-            // Đã sửa: Magic Number '3' (Nên dùng Transaction.TYPE_DEPOSIT_SAVINGS)
+            // Đã sửa: Magic Number '3' (Nên dùng bank.Transaction.TYPE_DEPOSIT_SAVINGS)
             Transaction t = new Transaction(Transaction.TYPE_DEPOSIT_SAVINGS, amount, initialBalance, finalBalance);
             addTransaction(t);
             logger.info("Nap tien vao tai khoan {} thanh cong {} " , getAccountNumber(), amount);
@@ -52,7 +54,7 @@ public class SavingsAccount extends Account { // Đã sửa: Dấu ngoặc nhọ
             doWithdrawing(amount);
             double finalBalance = getBalance();
             
-            // Đã sửa: Magic Number '4' (Nên dùng Transaction.TYPE_WITHDRAW_SAVINGS)
+            // Đã sửa: Magic Number '4' (Nên dùng bank.Transaction.TYPE_WITHDRAW_SAVINGS)
             Transaction t = new Transaction(Transaction.TYPE_WITHDRAW_SAVINGS, amount, initialBalance, finalBalance);
             addTransaction(t);
             
