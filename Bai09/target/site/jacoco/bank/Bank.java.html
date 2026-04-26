@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bank.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Bai09</a> &gt; <a href="index.source.html" class="el_package">bank</a> &gt; <span class="el_source">Bank.java</span></div><h1>Bank.java</h1><pre class="source lang-java linenums">package bank;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
+// BƯỚC 1: Thêm lại thư viện SLF4J
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Bank {
+    // BƯỚC 2: Khai báo Logger cho class Bank
+<span class="nc" id="L17">    private static final Logger logger = LoggerFactory.getLogger(Bank.class);</span>
+
+    private List&lt;Customer&gt; customerList;
+
+<span class="nc" id="L21">    public Bank() {</span>
+<span class="nc" id="L22">        this.customerList = new ArrayList&lt;Customer&gt;();</span>
+<span class="nc" id="L23">    }</span>
+
+    public List&lt;Customer&gt; getCustomerList() {
+<span class="nc" id="L26">        return customerList;</span>
+    }
+
+    /**
+     * Set danh sach khach hang
+     * @param customerList danh sách khách hàng cần gán
+     */
+    public void setCustomerList(List&lt;Customer&gt; customerList) {
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (customerList == null) {</span>
+<span class="nc" id="L35">            this.customerList = new ArrayList&lt;Customer&gt;();</span>
+        } else {
+<span class="nc" id="L37">            this.customerList = customerList;</span>
+        }
+<span class="nc" id="L39">    }</span>
+
+    /**
+     * Đọc danh sách khách hàng từ InputStream
+     * @param inputStream luồng dữ liệu đầu vào
+     */
+    public void readCustomerList(InputStream inputStream) {
+<span class="nc" id="L46">        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {</span>
+            String line;
+<span class="nc" id="L48">            Customer current = null;</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            while ((line = reader.readLine()) != null) {</span>
+<span class="nc" id="L51">                line = line.trim();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                if (line.isEmpty()) continue;</span>
+
+<span class="nc" id="L54">                int last = line.lastIndexOf(':');</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                if (last &lt;= 0) continue;</span>
+
+<span class="nc" id="L57">                String token = line.substring(last + 1).trim();</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                if (token.matches(&quot;\\d{9}&quot;)) {</span>
+<span class="nc" id="L60">                    String name = line.substring(0, last).trim();</span>
+<span class="nc" id="L61">                    current = new Customer(Long.parseLong(token), name);</span>
+<span class="nc" id="L62">                    customerList.add(current);</span>
+
+                    // BƯỚC 3: Thay thế bằng logger.info (Sử dụng Parameterized Logging {})
+<span class="nc" id="L65">                    logger.info(&quot;Thêm khách hàng: {}&quot;, name);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                } else if (current != null) {</span>
+<span class="nc" id="L67">                    String[] parts = line.split(&quot;\\s+&quot;);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                    if (parts.length &gt;= 3) {</span>
+<span class="nc" id="L69">                        long num = Long.parseLong(parts[0]);</span>
+<span class="nc" id="L70">                        double bal = Double.parseDouble(parts[2]);</span>
+
+<span class="nc bnc" id="L72" title="All 3 branches missed.">                        switch (parts[1]) {</span>
+                            case &quot;CHECKING&quot;:
+<span class="nc" id="L74">                                current.addAccount(new CheckingAccount(num, bal));</span>
+<span class="nc" id="L75">                                break;</span>
+                            case &quot;SAVINGS&quot;:
+<span class="nc" id="L77">                                current.addAccount(new SavingsAccount(num, bal));</span>
+<span class="nc" id="L78">                                break;</span>
+                            default:
+                                // BƯỚC 4: Thay thế bằng logger.warn cho cảnh báo
+<span class="nc" id="L81">                                logger.warn(&quot;Loại tài khoản không hợp lệ: {}&quot;, parts[1]);</span>
+                        }
+                    }
+                }
+<span class="nc" id="L85">            }</span>
+<span class="nc" id="L86">        } catch (IOException e) {</span>
+            // BƯỚC 5: Thay thế bằng logger.error (Truyền luôn biến e để log chi tiết lỗi)
+<span class="nc" id="L88">            logger.error(&quot;Lỗi khi đọc danh sách khách hàng&quot;, e);</span>
+<span class="nc" id="L89">        }</span>
+<span class="nc" id="L90">    }</span>
+
+    public String getCustomersInfoByIdOrder() {
+<span class="nc" id="L93">        customerList.sort((o1, o2) -&gt; Long.compare(o1.getIdNumber(), o2.getIdNumber()));</span>
+
+<span class="nc" id="L95">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        for (int i = 0; i &lt; customerList.size(); i++) {</span>
+<span class="nc" id="L97">            sb.append(customerList.get(i).getCustomerInfo());</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if (i &lt; customerList.size() - 1) {</span>
+<span class="nc" id="L99">                sb.append(&quot;\n&quot;);</span>
+            }
+        }
+<span class="nc" id="L102">        return sb.toString();</span>
+    }
+
+    private String buildCustomerInfo(List&lt;Customer&gt; customers){
+<span class="nc" id="L106">        return customers.stream().map(Customer::getCustomerInfo).collect(Collectors.joining(&quot;\n&quot;));</span>
+    }
+
+    public String getCustomersInfoByNameOrder() {
+<span class="nc" id="L110">        List&lt;Customer&gt; copy = new ArrayList&lt;Customer&gt;(customerList);</span>
+<span class="nc" id="L111">        copy.sort ((c1,c2)-&gt;{</span>
+<span class="nc" id="L112">            int res = c1.getFullName().compareTo(c2.getFullName());</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            return res != 0 ? res : Long.compare(c1.getIdNumber(), c2.getIdNumber());</span>
+        });
+
+<span class="nc" id="L116">        return buildCustomerInfo(copy);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

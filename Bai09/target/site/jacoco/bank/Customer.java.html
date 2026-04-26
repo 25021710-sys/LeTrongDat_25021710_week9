@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Customer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Bai09</a> &gt; <a href="index.source.html" class="el_package">bank</a> &gt; <span class="el_source">Customer.java</span></div><h1>Customer.java</h1><pre class="source lang-java linenums">package bank;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Lớp bank.Customer đại diện cho một khách hàng.
+ */
+public class Customer {
+    private long idNumber;
+    private String fullName;
+    private List&lt;Account&gt; accountList;
+
+    /**
+     * Constructor không tham số (phục vụ MyTest).
+     */
+    public Customer() {
+<span class="nc" id="L18">        this(0L, &quot;&quot;);</span>
+<span class="nc" id="L19">    }</span>
+
+<span class="fc" id="L21">    public Customer(long idNumber, String fullName) {</span>
+<span class="fc" id="L22">        this.idNumber = idNumber;</span>
+<span class="fc" id="L23">        this.fullName = fullName;</span>
+<span class="fc" id="L24">        this.accountList = new ArrayList&lt;Account&gt;();</span>
+<span class="fc" id="L25">    }</span>
+
+    public long getIdNumber() {
+<span class="nc" id="L28">        return idNumber;</span>
+    }
+
+    public void setIdNumber(long idNumber) {
+<span class="nc" id="L32">        this.idNumber = idNumber;</span>
+<span class="nc" id="L33">    }</span>
+
+    public String getFullName() {
+<span class="nc" id="L36">        return fullName;</span>
+    }
+
+    public void setFullName(String fullName) {
+<span class="nc" id="L40">        this.fullName = fullName;</span>
+<span class="nc" id="L41">    }</span>
+
+    public List&lt;Account&gt; getAccountList() {
+<span class="fc" id="L44">        return accountList;</span>
+    }
+
+    public void setAccountList(List&lt;Account&gt; accountList) {
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (accountList == null) {</span>
+<span class="nc" id="L49">            this.accountList = new ArrayList&lt;Account&gt;();</span>
+        } else {
+<span class="nc" id="L51">            this.accountList = accountList;</span>
+        }
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Thêm tài khoản cho khách hàng.
+     */
+    public void addAccount(Account account) {
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (account == null) {</span>
+<span class="nc" id="L60">            return;</span>
+        }
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (!accountList.contains(account)) {</span>
+<span class="fc" id="L63">            accountList.add(account);</span>
+        }
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Xóa tài khoản khỏi khách hàng.
+     */
+    public void removeAccount(Account account) {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (account == null) {</span>
+<span class="nc" id="L72">            return;</span>
+        }
+<span class="fc" id="L74">        accountList.remove(account);</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Thông tin khách hàng dạng text.
+     */
+    public String getCustomerInfo() {
+<span class="fc" id="L81">        return &quot;Số CMND: &quot; + idNumber + &quot;. Họ tên: &quot; + fullName + &quot;.&quot;;</span>
+    }
+
+    //public Collection&lt;Object&gt; getAccounts() {
+    //}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

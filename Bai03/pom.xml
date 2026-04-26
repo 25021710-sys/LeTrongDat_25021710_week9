@@ -69,6 +69,12 @@
             <artifactId>Bai02</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.14.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

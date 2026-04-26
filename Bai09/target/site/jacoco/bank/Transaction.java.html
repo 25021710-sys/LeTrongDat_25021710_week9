@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Bai09</a> &gt; <a href="index.source.html" class="el_package">bank</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">package bank;
+
+import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Đại diện cho một giao dịch.
+ */
+public class Transaction {
+    public static final int TYPE_DEPOSIT_CHECKING = 1;
+    public static final int TYPE_WITHDRAW_CHECKING = 2;
+    public static final int TYPE_DEPOSIT_SAVINGS = 3;
+    public static final int TYPE_WITHDRAW_SAVINGS = 4;
+
+    private int type;
+    private double amount;
+    private double initialBalance;
+    private double finalBalance;
+<span class="fc" id="L20">    private static final Logger logger=LoggerFactory.getLogger(Transaction.class);</span>
+<span class="fc" id="L21">    public Transaction(int type, double amount, double initialBalance, double finalBalance) {</span>
+<span class="fc" id="L22">        this.type = type;</span>
+<span class="fc" id="L23">        this.amount = amount;</span>
+<span class="fc" id="L24">        this.initialBalance = initialBalance;</span>
+<span class="fc" id="L25">        this.finalBalance = finalBalance;</span>
+<span class="fc" id="L26">    }</span>
+
+    public int getType() {
+<span class="fc" id="L29">        return type;</span>
+    }
+
+    public void setType(int type) {
+<span class="nc" id="L33">        this.type = type;</span>
+<span class="nc" id="L34">    }</span>
+
+    public double getAmount() {
+<span class="nc" id="L37">        return amount;</span>
+    }
+
+    public void setAmount(double amount) {
+<span class="nc" id="L41">        this.amount = amount;</span>
+<span class="nc" id="L42">    }</span>
+
+    public double getInitialBalance() {
+<span class="nc" id="L45">        return initialBalance;</span>
+    }
+
+    public void setInitialBalance(double initialBalance) {
+<span class="nc" id="L49">        this.initialBalance = initialBalance;</span>
+<span class="nc" id="L50">    }</span>
+
+    public double getFinalBalance() {
+<span class="nc" id="L53">        return finalBalance;</span>
+    }
+
+    public void setFinalBalance(double finalBalance) {
+<span class="nc" id="L57">        this.finalBalance = finalBalance;</span>
+<span class="nc" id="L58">    }</span>
+
+    // Đã sửa: Thiếu Javadoc cho phương thức public (Google Style cực kỳ khắt khe lỗi này)
+    // Đã sửa: Tên phương thức không tuân thủ camelCase (có dấu gạch dưới)
+    // Đã sửa: Tên tham số 't' quá ngắn, không rõ nghĩa
+    /**
+     * Trả về mô tả chuỗi cho loại giao dịch.
+     * @param type loại giao dịch (ví dụ TYPE_DEPOSIT_CHECKING)
+     * @return mô tả chuỗi
+     */
+    public static String getTypeString(int type) {
+<span class="nc bnc" id="L69" title="All 5 branches missed.">        switch (type) {</span>
+            // Đã sửa: Thụt lề (Indentation) sai chuẩn, không nhất quán
+<span class="nc" id="L71">            case TYPE_DEPOSIT_CHECKING: return &quot;Nạp tiền vãng lai&quot;;</span>
+<span class="nc" id="L72">            case TYPE_WITHDRAW_CHECKING: return &quot;Rút tiền vãng lai&quot;;</span>
+<span class="nc" id="L73">            case TYPE_DEPOSIT_SAVINGS: return &quot;Nạp tiền tiết kiệm&quot;;</span>
+<span class="nc" id="L74">            case TYPE_WITHDRAW_SAVINGS: return &quot;Rút tiền tiết kiệm&quot;;</span>
+<span class="nc" id="L75">            default: return &quot;Không rõ&quot;;</span>
+        }
+    }
+
+    public String getTransactionSummary() {
+        // Vi phạm: Logging lộn xộn, dùng trực tiếp System.out, format tùy tiện
+<span class="nc" id="L81">        logger.debug(&quot;Summary process started for type:{} &quot;, this.type);</span>
+
+        // Đã sửa: Cực nặng: Dòng code siêu dài (Line Length &gt; 200 ký tự)
+        // Đã sửa: Thiếu khoảng trắng (Whitespace) quanh các toán tử '+'
+        // Đã sửa: Không sử dụng biến tạm, nhồi nhét mọi logic format vào một dòng
+        // Đã sửa: Gọi trực tiếp hàm Locale.US nhiều lần thay vì hằng số hoặc format chung
+<span class="nc" id="L87">        String typeStr = getTypeString(type);</span>
+<span class="nc" id="L88">        String initBalStr = String.format(Locale.US, &quot;%.2f&quot;, initialBalance);</span>
+<span class="nc" id="L89">        String amountStr = String.format(Locale.US, &quot;%.2f&quot;, amount);</span>
+<span class="nc" id="L90">        String finalBalStr = String.format(Locale.US, &quot;%.2f&quot;, finalBalance);</span>
+
+<span class="nc" id="L92">        return String.format(</span>
+                &quot;- Kiểu giao dịch: %s. Số dư ban đầu: $%s. Số tiền: $%s. Số dư cuối: $%s.&quot;,
+                typeStr, initBalStr, amountStr, finalBalStr
+        );
+
+       //return &quot;- Kiểu giao dịch: &quot;+getTypeString(type)+&quot;. Số dư ban đầu: $&quot;+String.format(java.util.Locale.US,&quot;%.2f&quot;,initialBalance)+&quot;. Số tiền: $&quot;+String.format(java.util.Locale.US,&quot;%.2f&quot;,amount)+&quot;. Số dư cuối: $&quot;+String.format(java.util.Locale.US,&quot;%.2f&quot;,finalBalance)+&quot;.&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
