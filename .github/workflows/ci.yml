@@ -22,10 +22,8 @@ jobs:
         cache: maven
 
     - name: Build and Test Bai10
-      # Lệnh này sẽ chạy Maven cho module Bai10
       run: mvn -pl Bai10 -am package
 
-    # --- CÁC BƯỚC DƯỚI ĐÂY SẼ CHẠY KỂ CẢ KHI BƯỚC TRÊN BỊ LỖI (ĐỂ BẠN LẤY REPORT) ---
     - name: Upload JAR Artifact
       if: always()
       uses: actions/upload-artifact@v4
