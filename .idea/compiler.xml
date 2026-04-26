@@ -10,6 +10,7 @@
         <module name="Bai04" />
         <module name="Bai03" />
         <module name="maven-lab-01" />
+        <module name="Bai04 (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

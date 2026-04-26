@@ -1,4 +1,4 @@
-name: Bai04 Matrix Strategy
+name: Bai05 Code Coverage Strategy
 
 on:
   push:
@@ -26,13 +26,20 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Đứng ở thư mục gốc, nhưng chỉ build và test riêng module Bai04 (-pl Bai04)
-      # và các module mà Bai04 phụ thuộc (-am)
-      - name: Build and Test Bai04 Only
-        run: mvn -B clean test package -pl Bai04 -am
+      # Sử dụng verify thay vì test để JaCoCo kiểm tra ngưỡng 80% coverage
+      - name: Build and Verify Bai05 with JaCoCo
+        run: mvn -B clean verify -pl Bai05 -am
 
+      # Lưu trữ file JAR sản phẩm
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Bai04-Build-Artifact-${{ matrix.os }}
-          path: Bai04/target/*.jar
+          name: Bai05-Build-Artifact-${{ matrix.os }}
+          path: Bai05/target/*.jar
+
+      # Lưu trữ báo cáo JaCoCo để xem độ bao phủ code (Bài 5)
+      - name: Upload JaCoCo Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bai05-JaCoCo-Report-${{ matrix.os }}
+          path: Bai05/target/site/jacoco/

@@ -16,6 +16,7 @@
         <module>Bai02</module>
         <module>Bai03</module>
         <module>Bai04</module>
+        <module>Bai05</module>
     </modules>
     <dependencies>
         <dependency>
