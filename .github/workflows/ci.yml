@@ -1,6 +1,5 @@
 name: Bai04 Matrix Strategy
 
-# Kích hoạt (trigger) khi có sự kiện push và pull_request
 on:
   push:
     branches: [ "main", "master" ]
@@ -10,18 +9,13 @@ on:
 jobs:
   build:
     strategy:
-      # fail-fast: false giúp các job trên OS khác vẫn tiếp tục chạy ngay cả khi có 1 OS bị lỗi
-      # (Rất hữu ích cho Bài 4 vì bạn sẽ cố tình tạo lỗi trên 1 HĐH)
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
 
     runs-on: ${{ matrix.os }}
 
-    # Chỉ định thư mục làm việc mặc định cho các lệnh 'run' là Bai04
-    defaults:
-      run:
-        working-directory: ./Bai04
+    # MÌNH ĐÃ XÓA PHẦN 'defaults' Ở ĐÂY ĐỂ TRÁNH BỊ KHÓA THƯ MỤC LÀM VIỆC
 
     steps:
       - name: Checkout repository
@@ -34,15 +28,18 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Thực thi vòng đời build của Maven (test và package) trong thư mục Bai04
+      # BƯỚC THÊM MỚI: Install project gốc trước (bỏ qua test để chạy nhanh)
+      - name: Install Root Project
+        run: mvn -B clean install -DskipTests
+
+      # Mới chui vào Bai04 để chạy Test (Bài 4)
       - name: Build with Maven (Test and Package)
         run: mvn -B clean test package
+        working-directory: ./Bai04
 
-      # Triển khai action upload-artifact để lưu giữ tệp .jar
+      # Lưu lại Artifact
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          # Đổi tên artifact để phân biệt giữa các hệ điều hành, tránh bị ghi đè lẫn nhau
           name: Bai04-Build-Artifact-${{ matrix.os }}
-          # Sửa lại đường dẫn thành Bai04 vì bạn đang build project Bai04
           path: Bai04/target/*.jar
