@@ -1,0 +1,41 @@
+name: Bai03 CI/CD Automation
+
+# 1. Kích hoạt (trigger) khi có sự kiện push và pull_request
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Chỉ định thư mục làm việc là Bai03
+    defaults:
+      run:
+        working-directory: ./Bai03
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Cấu hình JDK (Dựa theo file pom.xml trước đó bạn để source 1.8)
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: maven
+
+      # 2. Thực thi vòng đời build của Maven (test và package)
+      - name: Build with Maven (Test and Package)
+        run: mvn -B clean test package
+
+      # 3. Triển khai action upload-artifact để lưu giữ tệp .jar
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bai03-Build-Artifact
+          # Đường dẫn tính từ gốc repo để tìm file .jar
+          path: Bai03/target/*.jar
