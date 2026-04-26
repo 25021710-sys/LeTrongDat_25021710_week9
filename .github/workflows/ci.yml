@@ -1,8 +1,9 @@
-name: Bai06 Pipeline Optimization and Caching
+name: Bai07 Automated Code Review via PR
 
 on:
   push:
     branches: [ "main", "master" ]
+  # Sự kiện này rất quan trọng cho Bài 7: Kích hoạt khi có người tạo Pull Request
   pull_request:
     branches: [ "main", "master" ]
 
@@ -24,24 +25,35 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          # Đây là trái tim của Bài 06: Giúp lưu trữ các dependency để dùng lại
           cache: maven
 
-      - name: Build and Verify Bai06
-        # Lưu ý: Nếu bạn đã đổi tên folder/artifactId thành Bai06 thì sửa -pl Bai06
-        # Còn nếu vẫn dùng code Bai05 để test cache thì để Bai05 nhé.
-        # Ở đây mình để Bai06 theo yêu cầu của bạn.
-        run: mvn -B clean verify -pl Bai06 -am
+      - name: Build, Test and Checkstyle for Bai07
+        # Chạy verify sẽ kích hoạt cả test (JaCoCo) và Checkstyle (do đã cấu hình trong pom.xml)
+        run: mvn -B clean verify -pl Bai07 -am
+
+      # --- PHẦN THÊM MỚI CHO BÀI 7: BOT BÌNH LUẬN ---
+      - name: Checkstyle Inline Feedback Bot
+        # Dùng if: always() để đảm bảo Bot vẫn chạy và comment dù bước Build ở trên bị FAILED do lỗi code
+        # Chỉ chạy trên sự kiện PR và ở môi trường Ubuntu (để tránh bot spam 3 bình luận giống nhau do matrix)
+        if: always() && github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: warning
+      # ---------------------------------------------
 
       - name: Upload JAR Artifact
+        # Dùng if: always() để file JAR và Report vẫn được lưu trữ ngay cả khi code bị lỗi format
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Bai06-Build-Artifact-${{ matrix.os }}
-          path: Bai06/target/*.jar
+          name: Bai07-Build-Artifact-${{ matrix.os }}
+          path: Bai07/target/*.jar
 
       - name: Upload JaCoCo Coverage Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Bai06-JaCoCo-Report-${{ matrix.os }}
-          # Sửa path cho khớp với folder Bai06
-          path: Bai06/target/site/jacoco/
+          name: Bai07-JaCoCo-Report-${{ matrix.os }}
+          path: Bai07/target/site/jacoco/
